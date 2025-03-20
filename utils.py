@@ -103,7 +103,7 @@ def load(timestamp,forecasted_value,actual_value):
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="uqudo",
+            password=os.getenv('MYSQL_CONNECTOR_PASSWORD'),
             database="grafana-test"
         )
         if conn.is_connected():

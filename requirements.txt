@@ -1,1 +1,3 @@
 pandas
+mysql-connector-python
+apache-airflow

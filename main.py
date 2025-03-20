@@ -3,14 +3,6 @@ import pickle
 from utils import extract,round_off_timestamp,transform,load,feature_col_names
 
 
-# current_time=datetime.now(timezone.utc)
-# start_time=round_off_timestamp(current_time-timedelta(minutes=150))
-# end_time=round_off_timestamp(current_time-timedelta(minutes=90))
-# print('start:',start_time)
-# print('end:',end_time)
-
-
-
 
 
 
