@@ -104,7 +104,7 @@ def load(timestamp,forecasted_value,actual_value):
             host="localhost",
             user="root",
             password=os.getenv('MYSQL_CONNECTOR_PASSWORD'),
-            database="grafana-test"
+            database="load_forecast_de"
         )
         if conn.is_connected():
             print("Connected to MySQL successfully!")
@@ -115,7 +115,7 @@ def load(timestamp,forecasted_value,actual_value):
         print(' Error in mysql connection:', e)
 
     insert_query = """
-        INSERT INTO `grafana-test`.`grafana-test-table` (`timestamp`, `DE_load_forecasted_entsoe_transparency`,`DE_load_actual_entsoe_transparency`)
+        INSERT INTO `load_forecast_de`.`grafana-test-table` (`timestamp`, `DE_load_forecasted_entsoe_transparency`,`DE_load_actual_entsoe_transparency`)
     VALUES (%s, %s, %s);
         """
     #cursor.execute(insert_query, (df['utc_timestamp'][i].strftime('%Y-%m-%d %H:%M:%S'), forecasted_value))
