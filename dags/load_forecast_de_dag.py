@@ -35,7 +35,7 @@ def run_transform(**kwargs):
 def run_predict(**kwargs):
     ti = kwargs['ti']
     transformed_df = ti.xcom_pull(task_ids='transform_task')
-    feature_series = transformed_df.loc[len(transformed_df) - 1, feature_col_names]
+    feature_series = transformed_df.loc[len(transformed_df) - 2, feature_col_names]
     print('feature series:',feature_series)
     model=load_model("../models/DE_LU_load_prediction_xgboost_model.pkl")
     load_forecasted_value = int(model.predict([feature_series])[0])
