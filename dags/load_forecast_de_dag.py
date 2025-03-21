@@ -20,7 +20,7 @@ def load_model(model_path):
 
 def run_extract(**kwargs):
     current_time = datetime.now(timezone.utc)
-    start_time = round_off_timestamp(current_time - timedelta(minutes=180))
+    start_time = round_off_timestamp(current_time - timedelta(minutes=360))
     end_time = round_off_timestamp(current_time - timedelta(minutes=90))
     return extract(start_time, end_time)
 
