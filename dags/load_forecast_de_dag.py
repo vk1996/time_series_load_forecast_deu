@@ -27,15 +27,18 @@ def run_extract(**kwargs):
 def run_transform(**kwargs):
     ti = kwargs['ti']
     extracted_df=ti.xcom_pull(task_ids='extract_task')
+    print('Extracted df:',extracted_df)
+    extracted_df = extracted_df.drop(extracted_df.index[-1])
     transformed_df=transform(extracted_df)
     print('Transform Success')
+    #print('Transformed df:', transformed_df)
     return transformed_df
 
 
 def run_predict(**kwargs):
     ti = kwargs['ti']
     transformed_df = ti.xcom_pull(task_ids='transform_task')
-    feature_series = transformed_df.loc[len(transformed_df) - 2, feature_col_names]
+    feature_series = transformed_df.loc[len(transformed_df) - 1, feature_col_names]
     print('feature series:',feature_series)
     model=load_model("../models/DE_LU_load_prediction_xgboost_model.pkl")
     load_forecasted_value = int(model.predict([feature_series])[0])
@@ -44,9 +47,15 @@ def run_predict(**kwargs):
 
 def run_load(**kwargs):
     ti = kwargs['ti']
+    extracted_df = ti.xcom_pull(task_ids='extract_task')
     transformed_df = ti.xcom_pull(task_ids='transform_task')
-    timestamp = transformed_df.loc[len(transformed_df) - 1, ['utc_timestamp']].iloc[0].strftime('%Y-%m-%d %H:%M:%S')
-    load_actual_value = int(transformed_df.loc[len(transformed_df) - 1, ['DE_load_actual_entsoe_transparency']].iloc[0])
+    timestamp = transformed_df.loc[len(transformed_df) - 1, ['utc_timestamp']].iloc[0]
+    print('timestamp used:',timestamp)
+    timestamp = timestamp+timedelta(minutes=15)
+    print('timestamp prdicted for:', timestamp)
+    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
+    load_actual_value = int(extracted_df.loc[len(extracted_df) - 1, ['DE_load_actual_entsoe_transparency']].iloc[0])
     load_forecasted_value = ti.xcom_pull(task_ids='predict_task')
     load(timestamp, load_forecasted_value, load_actual_value)
     print('Load Success')
